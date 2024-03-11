@@ -1,0 +1,5 @@
+LOG -> msg(cmd,dispatch,logger,logger,start,2)
+LOG -> msg(log,dispatch,a2,logger,msg(cmd,dispatch,a2,a2,start,1),5)
+LOG -> msg(log,dispatch,a2,logger,msg(info,dispatch,a1,a2,hello,3),6)
+LOG -> msg(log,dispatch,a2,logger,msg(info,request,a1,a2,greetings,4),8)
+LOG -> msg(log,dispatch,a2,logger,msg(answer,reply,a2,a1,okgreetings,7),9)
