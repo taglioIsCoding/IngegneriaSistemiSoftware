@@ -1,0 +1,43 @@
+System helloworld0
+
+// Dichiarazioni del materiale che permette agli attori di interagine (a.k.a i messaggi)
+// id_messaggio : payload 
+Dispatch info : info(N) "commento"
+Request req : requesting(N) "formato di richiesta Prod -> Cons"
+Reply replied : replied_to_(ACK) "formato di risposta Cons -> Prod"
+
+Context ctxhello ip [host="localhost" port=8000] 
+
+QActor producer context ctxhello{
+	State s0 initial{
+		println("Sono il $name") color magenta
+		[#Thread.sleep(200)#]
+		println("$name: sending request ...") color magenta
+		request consumer -m req : requesting(39)
+	}
+	Transition t0 whenReply replied -> handleResponse
+	
+	State handleResponse {
+		onMsg(replied : replied_to_(ACK)){
+			println("$name: received response ${payloadArg(0)}") color magenta
+		}
+	}
+}
+
+QActor consumer context ctxhello{
+	State s0 initial{
+		println("	Sono il $name") color green
+	}
+	Transition t0 whenRequest req -> handleRequest
+	
+	State handleRequest{
+		onMsg(req : requesting(N)){
+			println("	$name: received request ${payloadArg(0)}") color green
+			println("	$name: sending response ...") color green
+			[#
+				var X = "ack_${payloadArg(0)}"
+			#]
+			replyTo req with replied : replied_to_($X) 
+		}
+	}
+}

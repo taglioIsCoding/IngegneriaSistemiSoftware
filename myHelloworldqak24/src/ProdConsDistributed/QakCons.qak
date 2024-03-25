@@ -1,0 +1,27 @@
+System prod_cons
+
+// Dichiarazioni del materiale che permette agli attori di interagine (a.k.a i messaggi)
+// id_messaggio : payload 
+Dispatch info : info(N) "commento"
+Request req : requesting(N) "formato di richiesta Prod -> Cons"
+Reply replied : replied_to_(ACK) "formato di risposta Cons -> Prod"
+
+Context ctxconsumer ip [host="localhost" port=8015] 
+
+QActor consumer context ctxconsumer{
+	State s0 initial{
+		println("	Sono il $name") color green
+	}
+	Transition t0 whenRequest req -> handleRequest
+	
+	State handleRequest{
+		onMsg(req : requesting(N)){
+			println("	$name: received request ${payloadArg(0)}") color green
+			println("	$name: sending response ...") color green
+			[#
+				var X = "ack_${payloadArg(0)}"
+			#]
+			replyTo req with replied : replied_to_($X) 
+		}
+	}
+}

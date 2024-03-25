@@ -1,0 +1,4 @@
+{"actor":"ping", "msgType":"dispatch", "curstate":"s0", "nextstate":"handleEnemyHit", "msgId":"hit"}
+{"actor":"ping", "msgType":"dispatch", "curstate":"handleEnemyHit", "nextstate":"handleEnemyHit", "msgId":"hit"}
+{"actor":"pong", "msgType":"dispatch", "curstate":"s0", "nextstate":"handleEnemyHit", "msgId":"hit"}
+{"actor":"pong", "msgType":"dispatch", "curstate":"handleEnemyHit", "nextstate":"handleEnemyHit", "msgId":"hit"}

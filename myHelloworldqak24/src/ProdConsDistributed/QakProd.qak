@@ -1,0 +1,29 @@
+System prod_cons
+
+Dispatch info : info(N) "commento"
+Request req : requesting(N) "formato di richiesta Prod -> Cons"
+Reply replied : replied_to_(ACK) "formato di risposta Cons -> Prod"
+
+Context ctxproducer ip [host="localhost" port=8014] 
+Context ctxconsumer ip [host="130.136.113.239" port=8015]
+
+ExternalQActor consumer context ctxconsumer 
+
+QActor producer context ctxproducer{
+	State s0 initial{
+		println("Sono il $name") color magenta
+		[#Thread.sleep(200)#]
+		println("$name: sending request ...") color magenta
+		request consumer -m req : requesting(39)
+	}
+	Transition t0 whenReply replied -> handleResponse
+	
+	State handleResponse {
+		onMsg(replied : replied_to_(ACK)){
+			println("$name: received response ${payloadArg(0)}") color magenta
+		}
+	}
+} 
+
+
+// 
