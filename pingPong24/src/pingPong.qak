@@ -1,0 +1,92 @@
+System ping_pong
+
+Dispatch ball : ball(NUM_GAME) "Dispactch che rappresenta il colpo di racchetta"
+Dispatch update : update(STR, N) 
+
+Request info_test : info_test(X)  "sent by the testUnit to the observer"
+Reply info_test : obsinfo(X)
+
+Context ctxpingpong ip [host="localhost" port=8000] 
+
+QActor ping context ctxpingpong{
+	
+	[# 
+		var N = 1
+	#]
+	
+	State s0 initial{
+		println("Sono il $name") color magenta
+		delay 500
+		forward pong -m ball : ball($N)
+		println("Invio battuta") color magenta
+		updateResource [# "update($name, 1)" #]
+	} 
+	Transition hit whenTime 1000 -> end_of_excange 
+					whenMsg ball -> handle_ball
+
+	
+	State handle_ball{
+		if [# N < 5 #]{
+			[# N = N + 1#]
+			println("Invio $N") color magenta
+			forward pong -m ball : ball($N)
+			updateResource [# "update($name, $N)" #]
+		} else {
+			println("$name fine") color magenta
+			// [# System.exit(0) #]	
+		}
+	} 
+	Transition hit whenTime 1000 -> end_of_excange 
+					whenMsg ball -> handle_ball
+	
+	State end_of_excange{
+		println("$name non ho ricevuto risposta") color magenta
+		[# System.exit(0) #]
+	} 
+	
+}
+
+QActor pong context ctxpingpong{
+	
+	State s0 initial{
+		println("	Sono il $name") color green
+	}
+	Transition first_hit whenMsg ball -> handle_ball
+	
+	State handle_ball{
+		onMsg(ball: ball(X)){
+			println("	$name: recived ping ${payloadArg(0)}") color green
+			forward ping -m ball : ball($payloadArg(0))
+		}
+	} 
+	Transition next_hit whenMsg ball -> handle_ball
+	
+}
+
+QActor referee context ctxpingpong{
+	
+	[#
+		var Nlast = -1
+	#]
+	
+	State s0 initial{
+		println("	Sono il $name") color blue
+		observeResource ping msgid update
+	}
+	Transition recive_update whenMsg update -> handle_update
+	
+	State handle_update{
+		onMsg(update : update(STR, N)){
+			[# Nlast = payloadArg(1).toInt() #]
+			println("$name: saw ${payloadArg(0)} with ${payloadArg(1)}") color blue
+		}
+	} 
+	Transition recive_update whenMsg update -> handle_update whenRequest info_test -> handle_test_req
+	
+	State handle_test_req{
+		onMsg(info_test : info_test(X)){
+			replyTo info_test with info_test : obsinfo($Nlast) 
+		}
+	}
+	
+}

@@ -5,11 +5,13 @@ Dispatch hit : hit(NUM_GAME) "Dispactch che rappresenta il colpo di racchetta"
 Context ctxpingpong ip [host="localhost" port=8000] 
 
 QActor ping context ctxpingpong{
+	[# var X = 20 #]
+	
 	State s0 initial{
 		println("Sono il $name") color magenta
 		[#Thread.sleep(200)#]
 		println("$name: sending ping ...") color magenta
-		forward pong -m hit : hit(39)
+		forward pong -m hit : hit($X)
 	}
 	Transition t0 whenMsg hit -> handleEnemyHit
 	
@@ -18,7 +20,8 @@ QActor ping context ctxpingpong{
 			println("$name: recived pong ${payloadArg(0)}") color magenta
 			if [#(0..10).random() % 4 != 0#]{
 				println("$name: I hit the ball =)") color magenta
-				forward pong -m hit : hit(39)
+				[# X = X + 1 #]
+				forward pong -m hit : hit($X)
 			} else {
 				println("$name: I miss the ball =(") color magenta
 			}
@@ -38,7 +41,8 @@ QActor pong context ctxpingpong{
 			println("	$name: recived ping ${payloadArg(0)}") color green
 			if [#(0..10).random() % 4 != 0 #]{
 				println("	$name: I hit the ball =)") color green
-				forward ping -m hit : hit(39)
+				[# var X = payloadArg(0).toInt() + 1 #]
+				forward ping -m hit : hit($X)
 			} else {
 				println("	$name: I miss the ball =(") color green
 			}

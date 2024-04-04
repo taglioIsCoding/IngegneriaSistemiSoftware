@@ -1,0 +1,80 @@
+System ping_pong
+
+Dispatch ball : ball(NUM_GAME) "Dispactch che rappresenta il colpo di racchetta"
+Dispatch update : update(STR, N) "Dispactch che rappresenta il colpo di racchetta"
+
+Request info_test : info_test(X)  "sent by the testUnit to the observer"
+Reply info_test : obsinfo(X)
+
+
+//Dispatch hit : hit(NUM_GAME) "Dispactch che rappresenta il colpo di racchetta"
+//
+//Context ctxpingpong ip [host="localhost" port=8000] 
+//
+//QActor ping context ctxpingpong{
+//	
+//	State s0 initial{
+//		println("Sono il $name") color magenta
+//		[#Thread.sleep(200)#]
+//		println("$name: sending ping ...") color magenta
+//		forward pong -m hit : hit(39)
+//	}
+//	Transition t0 whenMsg hit -> handleEnemyHit
+//	
+//	State handleEnemyHit {
+//		onMsg(hit : hit(NUM_GAME)){
+//			println("$name: recived pong ${payloadArg(0)}") color magenta
+//			if [#(0..10).random() % 4 != 0#]{
+//				println("$name: I hit the ball =)") color magenta
+//				forward pong -m hit : hit(39)
+//			} else {
+//				println("$name: I miss the ball =(") color magenta
+//			}
+//		}
+//	}
+//	Transition t0 whenMsg hit -> handleEnemyHit
+//}
+
+Context ctxpong ip [host="127.0.0.1" port=8001]
+Context ctxping ip [host="localhost" port=8000]
+
+ExternalQActor pong context ctxpong
+
+QActor ping context ctxping{
+	
+	[# 
+		var N = 1
+	#]
+	
+	State s0 initial{
+		println("Sono il $name") color magenta
+		delay 500
+		forward pong -m ball : ball($N)
+		println("Invio battuta") color magenta
+		updateResource [# "update($name, 1)" #]
+	} 
+	Transition hit whenTime 1000 -> end_of_excange 
+					whenMsg ball -> handle_ball
+
+	
+	State handle_ball{
+		if [# N < 5 #]{
+			[# N = N + 1#]
+			println("Invio $N") color magenta
+			forward pong -m ball : ball($N)
+			println("Invio update: update($name, $N)") color magenta
+			updateResource [# "update($name, $N)" #]
+		} else {
+			println("$name fine") color magenta
+			// [# System.exit(0) #]	
+		}
+	} 
+	Transition hit whenTime 1000 -> end_of_excange 
+					whenMsg ball -> handle_ball
+	
+	State end_of_excange{
+		println("$name non ho ricevuto risposta") color magenta
+		[# System.exit(0) #]
+	} 
+	
+}

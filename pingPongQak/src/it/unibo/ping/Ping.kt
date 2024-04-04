@@ -21,13 +21,14 @@ class Ping ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) :
 	}
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		//val interruptedStateTransitions = mutableListOf<Transition>()
+		 var X = 20  
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
 						CommUtils.outmagenta("Sono il $name")
 						Thread.sleep(200) 
 						CommUtils.outmagenta("$name: sending ping ...")
-						forward("hit", "hit(39)" ,"pong" ) 
+						forward("hit", "hit($X)" ,"pong" ) 
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
@@ -42,7 +43,8 @@ class Ping ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) :
 								CommUtils.outmagenta("$name: recived pong ${payloadArg(0)}")
 								if( (0..10).random() % 4 != 0 
 								 ){CommUtils.outmagenta("$name: I hit the ball =)")
-								forward("hit", "hit(39)" ,"pong" ) 
+								 X = X + 1  
+								forward("hit", "hit($X)" ,"pong" ) 
 								}
 								else
 								 {CommUtils.outmagenta("$name: I miss the ball =(")

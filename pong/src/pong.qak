@@ -1,0 +1,49 @@
+System ping_pong
+
+Dispatch ball : ball(NUM_GAME) "Dispactch che rappresenta il colpo di racchetta"
+Dispatch update : update(STR, N) "Dispactch che rappresenta il colpo di racchetta"
+
+Request info_test : info_test(X)  "sent by the testUnit to the observer"
+Reply info_test : obsinfo(X)
+
+Context ctxping ip [host="127.0.0.1" port=8000]
+Context ctxpong ip [host="localhost" port=8001]
+
+ExternalQActor ping context ctxping
+
+//QActor pong context ctxpong{
+//	State s0 initial{
+//		println("	Sono il $name") color green
+//	}
+//	Transition t0 whenMsg hit -> handleEnemyHit
+//	
+//	State handleEnemyHit {
+//		onMsg(hit : hit(NUM_GAME)){
+//			println("	$name: recived ping ${payloadArg(0)}") color green
+//			if [#(0..10).random() % 4 != 0 #]{
+//				println("	$name: I hit the ball =)") color green
+//				forward ping -m hit : hit(39)
+//			} else {
+//				println("	$name: I miss the ball =(") color green
+//			}
+//		}
+//	}
+//	Transition t0 whenMsg hit -> handleEnemyHit
+//}
+
+QActor pong context ctxpong{
+	
+	State s0 initial{
+		println("	Sono il $name") color green
+	}
+	Transition first_hit whenMsg ball -> handle_ball
+	
+	State handle_ball{
+		onMsg(ball: ball(X)){
+			println("	$name: recived ping ${payloadArg(0)}") color green
+			forward ping -m ball : ball($payloadArg(0))
+		}
+	} 
+	Transition next_hit whenMsg ball -> handle_ball 
+	
+}

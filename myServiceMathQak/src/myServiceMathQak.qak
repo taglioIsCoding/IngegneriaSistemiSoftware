@@ -1,0 +1,116 @@
+System my_service_math_qak
+
+// Formato messaggi sincroni
+Request fibo_request : fibo(X)  
+Reply fibo_reply : fibo(X)
+
+// Formato messaggi asincroni
+Dispatch fibo_dispatch : fibo(X)
+
+Context ctxserver ip [host="localhost" port=8000]
+
+QActor server context ctxserver{
+	
+	[#
+		fun fibonacciUsingRecursion(num: Int): Int {
+		    return if (num <= 1) {
+		        num
+		    } else {
+		        fibonacciUsingRecursion(num - 1) + fibonacciUsingRecursion(num - 2)
+		    }
+		}
+	#]
+			
+	
+	State s0 initial{
+		println("Sono il $name") color magenta
+	}
+	Transition handle whenRequest fibo_request -> handle_request
+						whenMsg fibo_dispatch -> handle_dispatch
+	
+	State handle_request{
+		onMsg(fibo_request : fibo(X) ){
+			[# val Fibvalue =  fibonacciUsingRecursion(payloadArg(0).toInt()) #]
+			replyTo fibo_request with fibo_reply : fibo($Fibvalue)
+		}
+	}
+	Transition handle  whenRequest fibo_request -> handle_request
+						whenMsg fibo_dispatch -> handle_dispatch
+	
+	State handle_dispatch{
+		onMsg(fibo_dispatch : fibo(X) ){
+//			[# val Fibvalue =  fibonacciUsingRecursion(payloadArg(0).toInt()) #]
+//			forward asyncclient -m fibo_dispatch : fibo($Fibvalue)
+			delegateCurrentMsgTo runner
+		}
+	}
+	Transition handle whenRequest fibo_request -> handle_request
+						whenMsg fibo_dispatch -> handle_dispatch
+	
+}
+
+QActor runner context ctxserver dynamicOnly{
+	
+	[#
+		fun fibonacciUsingRecursion(num: Int): Int {
+		    return if (num <= 1) {
+		        num
+		    } else {
+		        fibonacciUsingRecursion(num - 1) + fibonacciUsingRecursion(num - 2)
+		    }
+		}
+	#]
+	
+	State s0 initial{
+		println("Sono il $name") color magenta
+	}
+	Transition handle whenMsg fibo_dispatch -> handle_dispatch
+	
+	State handle_dispatch{
+		onMsg(fibo_dispatch : fibo(X) ){
+			[# val Fibvalue =  fibonacciUsingRecursion(payloadArg(0).toInt()) #]
+			forward asyncclient -m fibo_dispatch : fibo($Fibvalue)
+			
+		}
+	}
+	
+}
+
+
+QActor client context ctxserver{
+	
+	State s0 initial{
+		println("	Sono il $name") color green
+		request server -m fibo_request : fibo(46)
+		println("	$name: asked for fibo of 6") color green 
+		request server -m fibo_request : fibo(2)
+		println("	$name: asked for fibo of 2") color green
+	}
+	Transition handle whenReply fibo_reply -> handle_reply
+	
+	State handle_reply{
+		onMsg(fibo_reply : fibo(X) ){
+			println("	$name: recived response ${payloadArg(0)}") color green
+		}
+	}
+	Transition handle whenReply fibo_reply -> handle_reply
+}
+
+QActor asyncclient context ctxserver{
+	
+	State s0 initial{
+		println("	Sono il $name") color blue
+		forward server -m fibo_dispatch : fibo(46)
+		println("	$name: asked for fibo of 46") color cyan
+		forward server -m fibo_dispatch : fibo(2)
+		println("	$name: asked for fibo of 2") color cyan
+	}
+	Transition handle whenMsg fibo_dispatch -> handle_dispatch
+	
+	State handle_dispatch{
+		onMsg(fibo_dispatch : fibo(X) ){
+			println("	$name: recived dispatch ${payloadArg(0)}") color blue
+		}
+	}
+	Transition handle whenMsg fibo_dispatch -> handle_dispatch
+}

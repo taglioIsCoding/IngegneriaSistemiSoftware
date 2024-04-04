@@ -39,7 +39,8 @@ class Pong ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) :
 								CommUtils.outgreen("	$name: recived ping ${payloadArg(0)}")
 								if( (0..10).random() % 4 != 0  
 								 ){CommUtils.outgreen("	$name: I hit the ball =)")
-								forward("hit", "hit(39)" ,"ping" ) 
+								 var X = payloadArg(0).toInt() + 1  
+								forward("hit", "hit($X)" ,"ping" ) 
 								}
 								else
 								 {CommUtils.outgreen("	$name: I miss the ball =(")

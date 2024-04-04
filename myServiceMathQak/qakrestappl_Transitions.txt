@@ -1,0 +1,6 @@
+{"actor":"server", "msgType":"dispatch", "curstate":"s0", "nextstate":"handle_dispatch", "msgId":"fibo_dispatch"}
+{"actor":"server", "msgType":"dispatch", "curstate":"handle_request", "nextstate":"handle_dispatch", "msgId":"fibo_dispatch"}
+{"actor":"server", "msgType":"dispatch", "curstate":"handle_dispatch", "nextstate":"handle_dispatch", "msgId":"fibo_dispatch"}
+{"actor":"runner", "msgType":"dispatch", "curstate":"s0", "nextstate":"handle_dispatch", "msgId":"fibo_dispatch"}
+{"actor":"asyncclient", "msgType":"dispatch", "curstate":"s0", "nextstate":"handle_dispatch", "msgId":"fibo_dispatch"}
+{"actor":"asyncclient", "msgType":"dispatch", "curstate":"handle_dispatch", "nextstate":"handle_dispatch", "msgId":"fibo_dispatch"}
