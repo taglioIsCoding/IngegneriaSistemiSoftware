@@ -1,0 +1,109 @@
+System wolf_detection_local
+
+Request manage_sonar : manage_sonar(STARTSTOP) // request per accendere spegnere il sonar
+Reply manage_sonar : success(BOOL) // reply per sapere se ha avuto successo
+
+Dispatch update : update(N)  // when a obstacle is in front of the sensor
+Dispatch update : far(N) 
+
+Dispatch manage_red_led : accendi(N) // when a obstacle is in front of the sensor 
+
+Context wolfdetectionlocal ip [host="localhost" port=8000] 
+
+QActor stazione context wolfdetectionlocal{
+	
+	[#
+		var ledRed = false 	
+	#]
+	
+	State s0 initial{
+		println("Sono la $name") color green
+		delay 500
+		// accendo il sonar
+		request sonar -m  manage_sonar : manage_sonar(true)
+	} 
+	Transition t1 whenReply manage_sonar -> handle_sonar whenMsg manage_red_led -> handle_led
+	
+	State handle_led {
+		onMsg(manage_red_led : accendi(N)){
+			println("$name: recived manage_red_led ${payloadArg(0)}") color green
+			[# ledRed = payloadArg(0).toBoolean() #]
+		}	
+	}
+	Transition t1 whenMsg manage_red_led -> handle_led
+	
+	State handle_sonar {
+		printCurrentMessage color green
+	}
+	Transition t1 whenMsg manage_red_led -> handle_led
+
+}
+
+QActor sonar context wolfdetectionlocal{
+	
+	[#
+		var isSonarOn = false
+		var ledBlue = true	
+	#]
+	
+	State s0 initial{
+		println("Sono il $name") color magenta
+		delay 500	
+		observeResource sensor msgid update
+	} 
+	Transition t1 whenRequest manage_sonar -> handle_sonar whenMsg update -> handle_update
+	
+	State handle_sonar {
+		onMsg(manage_sonar : manage_sonar(STARTSTOP)){
+			println("$name: recived manage_sonar ${payloadArg(0)}") color magenta
+			[# isSonarOn = payloadArg(0).toBoolean() #]
+			replyTo manage_sonar with manage_sonar : success(true)
+		}
+	}
+	Transition t1 whenRequest manage_sonar -> handle_sonar 
+	whenMsg update -> handle_update
+	
+	State handle_update {
+		 // printCurrentMessage color magenta
+		 println("Rilevato qualcosa dal sensore") color magenta	
+		 // Scatta FOTO
+		 // Simulatore per capire se è un lupo
+		 
+		 onMsg(update : update(N)){
+		 	[#ledBlue = true #]
+		 	if [# (0..100).random() % 3 == 0 #] {
+				println("LUPO") color magenta	
+				forward stazione -m manage_red_led : accendi(true)
+			} else {
+				println("NO LUPO") color magenta		
+			}	
+		 }
+		 
+		 onMsg(update : far(N)){
+		 	println("ostacolo lontano") color magenta	
+		 	[#ledBlue = false #]
+		 	forward stazione -m manage_red_led : accendi(false)
+		 }
+		 
+	}
+	Transition t1 whenRequest manage_sonar -> handle_sonar 
+	whenMsg update -> handle_update
+}
+
+QActor sensor context wolfdetectionlocal{
+	
+	State s0 initial{
+		println("Sono il $name") color cyan	
+		
+		[# while(true){ #]
+			delay 1000
+			if [# (0..10).random() % 2 == 0 #] {
+				// println("Rilevato qualcosa") color cyan
+				updateResource [# "update(N)" #]
+				delay 1000
+				// ostacolo si allontana
+				updateResource [# "far(N)" #]
+			}
+		[#}#]
+	} 
+}

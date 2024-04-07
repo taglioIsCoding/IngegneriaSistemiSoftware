@@ -30,8 +30,9 @@ class Ping ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) :
 						delay(500) 
 						forward("ball", "ball($N)" ,"pong" ) 
 						CommUtils.outmagenta("Invio battuta")
-						updateResourceRep( "update($name, 1)"  
+						updateResourceRep( "update($name, $N)"  
 						)
+						CommUtils.outmagenta("Invio update: update($name, $N)")
 						//genTimer( actor, state )
 					}
 					//After Lenzi Aug2002
@@ -54,6 +55,7 @@ class Ping ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) :
 						}
 						else
 						 {CommUtils.outmagenta("$name fine")
+						  System.exit(0)  
 						 }
 						//genTimer( actor, state )
 					}

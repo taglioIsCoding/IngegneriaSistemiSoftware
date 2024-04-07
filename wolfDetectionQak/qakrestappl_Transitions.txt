@@ -1,0 +1,6 @@
+{"actor":"stazione", "msgType":"dispatch", "curstate":"s0", "nextstate":"handle_led", "msgId":"manage_red_led"}
+{"actor":"stazione", "msgType":"dispatch", "curstate":"handle_led", "nextstate":"handle_led", "msgId":"manage_red_led"}
+{"actor":"stazione", "msgType":"dispatch", "curstate":"handle_sonar", "nextstate":"handle_led", "msgId":"manage_red_led"}
+{"actor":"sonar", "msgType":"dispatch", "curstate":"s0", "nextstate":"handle_update", "msgId":"update"}
+{"actor":"sonar", "msgType":"dispatch", "curstate":"handle_sonar", "nextstate":"handle_update", "msgId":"update"}
+{"actor":"sonar", "msgType":"dispatch", "curstate":"handle_update", "nextstate":"handle_update", "msgId":"update"}

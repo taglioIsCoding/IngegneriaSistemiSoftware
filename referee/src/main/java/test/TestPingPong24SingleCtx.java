@@ -109,7 +109,7 @@ public static void activateSystemUsingDeploy() {
  */
 	@Test
 	public void testPingPongSystem() {
-		IApplMessage req  = CommUtils.buildRequest( "tester", "info", "info(X)", "referee");
+		IApplMessage req  = CommUtils.buildRequest( "tester", "info_test", "info_test(X)", "referee");
  		try {
   			 CommUtils.outmagenta("testPingPongSystem ======================================= ");
 			while( connSupport == null ) {
@@ -121,7 +121,8 @@ public static void activateSystemUsingDeploy() {
 			IApplMessage reply = connSupport.request(req);
 			CommUtils.outcyan("testPingPongSystem reply="+reply);
 			String answer = reply.msgContent();
-			assertEquals(answer, "obsinfo(5)");
+			CommUtils.outcyan("testPingPongSystem answer="+answer);
+			assertEquals(answer, "obsinfo(update(ping,5))");
 		} catch (Exception e) {
 			CommUtils.outred("testPingPong ERROR " + e.getMessage());
 			fail("testRequest " + e.getMessage());

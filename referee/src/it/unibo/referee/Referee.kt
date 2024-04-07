@@ -22,7 +22,7 @@ class Referee ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 	override fun getBody() : (ActorBasicFsm.() -> Unit){
 		//val interruptedStateTransitions = mutableListOf<Transition>()
 		
-				var Nlast = -1
+				var Nlast = ""
 		return { //this:ActionBasciFsm
 				state("s0") { //this:State
 					action { //it:State
@@ -39,7 +39,9 @@ class Referee ( name: String, scope: CoroutineScope, isconfined: Boolean=false  
 					action { //it:State
 						if( checkMsgContent( Term.createTerm("update(STR,N)"), Term.createTerm("update(STR,N)"), 
 						                        currentMsg.msgContent()) ) { //set msgArgList
-								 Nlast = payloadArg(1).toInt()  
+								 
+												if ( payloadArg(1) != "nonews")
+													Nlast = payloadArg(1) 
 								CommUtils.outblue("$name: saw ${payloadArg(0)} with ${payloadArg(1)}")
 						}
 						//genTimer( actor, state )

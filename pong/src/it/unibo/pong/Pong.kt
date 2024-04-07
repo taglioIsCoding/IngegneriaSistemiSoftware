@@ -29,8 +29,11 @@ class Pong ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) :
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
+				 	 		stateTimer = TimerActor("timer_s0", 
+				 	 					  scope, context!!, "local_tout_"+name+"_s0", 1000.toLong() )  //OCT2023
 					}	 	 
-					 transition(edgeName="first_hit0",targetState="handle_ball",cond=whenDispatch("ball"))
+					 transition(edgeName="first_hit0",targetState="end_of_excange",cond=whenTimeout("local_tout_"+name+"_s0"))   
+					transition(edgeName="first_hit1",targetState="handle_ball",cond=whenDispatch("ball"))
 				}	 
 				state("handle_ball") { //this:State
 					action { //it:State
@@ -43,8 +46,21 @@ class Pong ( name: String, scope: CoroutineScope, isconfined: Boolean=false  ) :
 					}
 					//After Lenzi Aug2002
 					sysaction { //it:State
+				 	 		stateTimer = TimerActor("timer_handle_ball", 
+				 	 					  scope, context!!, "local_tout_"+name+"_handle_ball", 1000.toLong() )  //OCT2023
 					}	 	 
-					 transition(edgeName="next_hit1",targetState="handle_ball",cond=whenDispatch("ball"))
+					 transition(edgeName="next_hit2",targetState="end_of_excange",cond=whenTimeout("local_tout_"+name+"_handle_ball"))   
+					transition(edgeName="next_hit3",targetState="handle_ball",cond=whenDispatch("ball"))
+				}	 
+				state("end_of_excange") { //this:State
+					action { //it:State
+						CommUtils.outgreen("$name non ho ricevuto risposta")
+						 System.exit(0)  
+						//genTimer( actor, state )
+					}
+					//After Lenzi Aug2002
+					sysaction { //it:State
+					}	 	 
 				}	 
 			}
 		}

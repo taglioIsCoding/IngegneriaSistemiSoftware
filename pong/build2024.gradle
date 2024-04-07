@@ -170,9 +170,9 @@ task dovesiamo {
 
 distributions {
     main {
-        distributionBaseName = 'ping_pong'
+        distributionBaseName = 'ping_pong_dist'
         contents { 
-             from './ping_pong.pl'
+             from './ping_pong_dist.pl'
              from './sysRules.pl'
              from './facadeConfig.json'
         }

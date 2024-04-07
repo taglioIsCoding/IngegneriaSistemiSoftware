@@ -1,8 +1,7 @@
-System ping_pong
+System ping_pong_dist
 
 
 Dispatch update : update(STR, N)
-Dispatch update : nonews(X)
 
 Request info_test : info_test(X)  "sent by the testUnit to the observer"
 Reply info_test : obsinfo(X)
@@ -15,7 +14,7 @@ ExternalQActor ping context ctxping
 QActor referee context referee{
 	
 	[#
-		var Nlast = -1
+		var Nlast = ""
 	#]
 	
 	State s0 initial{
@@ -25,11 +24,13 @@ QActor referee context referee{
 	Transition recive_update whenMsg update -> handle_update
 	
 	State handle_update{
-		
 		onMsg(update : update(STR, N)){
-			[# Nlast = payloadArg(1).toInt() #]
+			
+			[# 
+				if ( payloadArg(1) != "nonews")
+					Nlast = payloadArg(1) 
+			#]
 			println("$name: saw ${payloadArg(0)} with ${payloadArg(1)}") color blue
-			//println("$name: hi ${payloadArg(0)} ${payloadArg(1)}") color blue
 		}
 	} 
 	Transition recive_update whenMsg update -> handle_update whenRequest info_test -> handle_test_req

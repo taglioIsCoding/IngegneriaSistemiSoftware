@@ -1,4 +1,4 @@
-System ping_pong
+System ping_pong_dist
 
 Dispatch ball : ball(NUM_GAME) "Dispactch che rappresenta il colpo di racchetta"
 Dispatch update : update(STR, N) "Dispactch che rappresenta il colpo di racchetta"
@@ -36,7 +36,7 @@ QActor pong context ctxpong{
 	State s0 initial{
 		println("	Sono il $name") color green
 	}
-	Transition first_hit whenMsg ball -> handle_ball
+	Transition first_hit whenTime 1000 -> end_of_excange whenMsg ball -> handle_ball 
 	
 	State handle_ball{
 		onMsg(ball: ball(X)){
@@ -44,6 +44,10 @@ QActor pong context ctxpong{
 			forward ping -m ball : ball($payloadArg(0))
 		}
 	} 
-	Transition next_hit whenMsg ball -> handle_ball 
+	Transition next_hit whenTime 1000 -> end_of_excange whenMsg ball -> handle_ball 
 	
+	State end_of_excange{
+		println("$name non ho ricevuto risposta") color green
+		[# System.exit(0) #]
+	} 
 }

@@ -1,7 +1,7 @@
-System ping_pong
+System ping_pong_dist
 
 Dispatch ball : ball(NUM_GAME) "Dispactch che rappresenta il colpo di racchetta"
-Dispatch update : update(STR, N) "Dispactch che rappresenta il colpo di racchetta"
+Dispatch update : update(STR, N)
 
 Request info_test : info_test(X)  "sent by the testUnit to the observer"
 Reply info_test : obsinfo(X)
@@ -51,10 +51,11 @@ QActor ping context ctxping{
 		delay 500
 		forward pong -m ball : ball($N)
 		println("Invio battuta") color magenta
-		updateResource [# "update($name, 1)" #]
+		updateResource [# "update($name, $N)" #]
+		println("Invio update: update($name, $N)") color magenta
 	} 
 	Transition hit whenTime 1000 -> end_of_excange 
-					whenMsg ball -> handle_ball
+	whenMsg ball -> handle_ball
 
 	
 	State handle_ball{
@@ -66,7 +67,7 @@ QActor ping context ctxping{
 			updateResource [# "update($name, $N)" #]
 		} else {
 			println("$name fine") color magenta
-			// [# System.exit(0) #]	
+			[# System.exit(0) #]	
 		}
 	} 
 	Transition hit whenTime 1000 -> end_of_excange 
