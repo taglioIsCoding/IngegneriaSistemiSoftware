@@ -1,0 +1,2 @@
+{"actor":"led_usage", "msgType":"dispatch", "curstate":"s0", "nextstate":"handle_led", "msgId":"led_cmd"}
+{"actor":"led_usage", "msgType":"dispatch", "curstate":"handle_led", "nextstate":"handle_led", "msgId":"led_cmd"}

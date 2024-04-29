@@ -1,0 +1,67 @@
+System sonar_qak_24
+
+Dispatch doread : doread(X)
+
+Context ctxsonarqak24 ip [host="localhost" port=8000] 
+
+QActor sonarusagemock context ctxsonarqak24 {
+	
+	State s0 initial{
+		println("Sono la $name") color green
+		delay 500
+	} 
+	
+}
+
+QActor sonar24 context ctxsonarqak24 {
+	
+	State s0 initial{
+		println("Sono la $name") color red
+		delay 500
+	} 
+	
+}
+
+QActor sonardevice context ctxsonarqak24 {
+	
+	[# 
+		lateinit var reader : java.io.BufferedReader
+	    lateinit var p : Process	
+	    var Distance = 0
+	#]
+	
+	State s0 initial{
+		println("Sono la $name") color blue
+		delay 500
+		[# 
+			p = Runtime.getRuntime().exec("python3 /home/pi/Desktop/sonar24/sonar.py")
+			reader  = java.io.BufferedReader(  java.io.InputStreamReader(p.getInputStream() ))
+			
+		#]
+	} Goto readSonarData
+	
+	State readSonarData {
+	[# 
+		var data = reader.readLine()
+		CommUtils.outblue("$name with python: data = $data"   ) 
+		if( data != null ){
+		try{ 
+			val vd = data.toFloat()
+			val v  = vd.toInt()
+			if( v <= 100 ){	//A first filter ...
+				Distance = v				
+			}else Distance = 0
+		}catch(e: Exception){
+				CommUtils.outred("$name readSonarDataERROR: $e "   )
+		}
+		}//if
+		
+	#]	
+		if [# Distance > 0 #] { 
+		    println("$name with python: data = $data"   ) color blue
+		}
+		
+		autodispatch doread : doread(1)
+	} Transition t0 whenMsg doread -> readSonarData 
+	
+}

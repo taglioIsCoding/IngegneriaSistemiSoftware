@@ -1,0 +1,1 @@
+{"actor":"sonardevice", "msgType":"dispatch", "curstate":"readSonarData", "nextstate":"readSonarData", "msgId":"doread"}

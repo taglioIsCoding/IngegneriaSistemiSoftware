@@ -1,0 +1,44 @@
+System led_qak
+
+Dispatch led_cmd : manage_led(STARTSTOP) // request per accendere spegnere il sonar
+
+
+Context ctxled ip [host="localhost" port=8001] 
+
+QActor led_usage context ctxled{
+	
+	State s0 initial{
+		println("Sono la $name") color green
+		delay 500
+	} 
+	Transition t1 whenMsg led_cmd -> handle_led
+	
+	State handle_led {
+		onMsg(led_cmd : manage_led(STARTSTOP)){
+			println("$name: recived manage_sonar ${payloadArg(0)}") color green
+			if [# payloadArg(0) == "ON" #]
+			{
+				println("$name: ACCENDO") color green
+				[# Runtime.getRuntime().exec("python3 on.py") #]
+			} else {
+				println("$name: SPENGO") color green
+				[# Runtime.getRuntime().exec("python3 off.py") #]
+			}
+		}
+	}
+	Transition t1 whenMsg led_cmd -> handle_led
+	
+}
+
+QActor sender context ctxled{
+	
+	State s0 initial{
+		println("Sono la $name") color blue
+		delay 500
+		forward led_usage -m  led_cmd : manage_led(ON)
+		delay 2000
+		forward led_usage -m  led_cmd : manage_led(OF)
+	} 
+	
+	
+}

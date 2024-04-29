@@ -1,0 +1,17 @@
+System vrsystem
+
+
+Event vrinfo : vrinfo(A,B)
+Dispatch move : move(M)  "M = w|s|a|d!r!l"
+
+Context ctxmover ip [host="localhost" port=8090]
+
+
+CodedQActor w1 context ctxmover className "main.mover"
+
+QActor mover context ctxmover {
+	State s0 initial{
+		println("Sono il $name") color magenta
+	}
+}
+
