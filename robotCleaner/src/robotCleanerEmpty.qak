@@ -1,0 +1,12 @@
+System robot_cleaner
+
+Context ctxrobot ip [host="localhost" port=8000] 
+
+QActor robot context ctxrobot {
+	
+	State s0 initial{
+		println("Sono la $name") color green
+		delay 500
+	} 
+	
+}
