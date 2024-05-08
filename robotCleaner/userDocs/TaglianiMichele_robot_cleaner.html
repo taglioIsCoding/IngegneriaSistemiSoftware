@@ -254,26 +254,41 @@ Il committente ritiene accettabile discutere un primo prototipo del sistema nel 
 La stanza è uno spazio euclideo definito da bordi e possiamo assumere in questa prima fase che non si siano ulteriori 
 ostacoli.
 <br>
-
-Ci sara' un'entita' chiamata robot che si muove all'interno della stanza
-
+Ci sara' un'entita' chiamata robot che si muove all'interno della stanza.
 <br>
-
 Lo Stato iniziale del robot è l’angolo superiore sinistro, detto Home.
+<br>
+Ci sara' un attore che realizza l'applicazione nominato cleaner24 che dovra' interagire nella prima fase del progetto 
+con il virtualRobot fornito. 
+<br>
+Il robot dovra' fermarsi dopo N secondi quando riecevera' un messaggio di allarme.
+<br>
+In questa fase assumiamo che il robot conosca gia' la forma della stanza in cui si trova, che non ci siano ostacoli all'interno di essa
+e che la strategia di movimento sia quella per colonne. La mappa e' stata generata tramite l'apposito attore di supporto map builder
+<br>
+Il robot utilizzera' come unita' di minsura per muoversi nello spazio la sua dimensione.
 
 <h2>Problem analysis</h2>
 In questa prima fase il nostro sistema presenta un funzionamento solo proattivo in quanto non riceve alcun tipo
-di stimolo dall'ambiente esterno 
+di stimolo dall'ambiente esterno ma ci e' stato chiesto di predispore an attore in grado di emettere un allarme.  
+Se questo attore sara' legato ad uno stimolo del mondo esterno allora il nostro sistema divetera' anche reattivo.
 
 Le principali problematiche poste dai requisiti sono riconducibili alle seguenti domande:
 <ul>
-	<li>Come fa il robot ad essere consapevole di aver persorso tutta la stanza?</li>
 	<li>Come comunico la partenza al virtual robot?</li>
 	<li>Come faccio a rendere il mio sistema utilizzarebile sia nell'ambiente virtuale sia nel modo reale con un robot del tipo RobotDisi? </li>
 </ul>
 
-<h2>Test plans</h2> 
+<h3>Architettura del sistema</h3>
+A seguito della discussione in aula si e' scelto di utilizzare, per questa prima fase, l'architettura che vede il VirtualRobot come un 
+POJO all'interno dell'attore cleaner24
 
+note: non riesco ancora a generare le immagini dell'architettura
+
+<h2>Test plans</h2> 
+Per verificare la coretta copertura di tutta la superficie si potra' utilizzare la rappresentazione che il robot 
+utilizza per muoversi all'interno della stanza facendo l'assunzione momentanea che il robot non debba 
+ricavare da solo la forma della stanza.  
 
 <!-- Analisi di un file di log -->
 
@@ -281,7 +296,7 @@ Le principali problematiche poste dai requisiti sono riconducibili alle seguenti
 
 <ul>
 <h4>Componenti</h4>
-
+<li><a href=../src/cleaner24NoRobot.qak >cleaner24</a></li>
 
 <h2>Testing</h2>
 

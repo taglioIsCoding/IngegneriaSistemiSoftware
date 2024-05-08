@@ -10,3 +10,12 @@ QActor robot context ctxrobot {
 	} 
 	
 }
+
+QActor user context ctxrobot {
+	
+	State s0 initial{
+		println("Sono la $name") color blue
+		delay 500
+	} 
+	
+}

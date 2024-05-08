@@ -1,0 +1,13 @@
+digraph mapbuildArch {
+	graph [fontcolor="#2D3436" fontname="Sans-Serif" fontsize=22 label=mapbuildArch nodesep=0.60 pad=2.0 rankdir=LR ranksep=0.75 splines=ortho]
+	node [fixedsize=true fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 height=1.4 imagescale=true labelloc=b shape=box style=rounded width=1.4]
+	edge [color="#7B8894"]
+	subgraph cluster_env {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label=env labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"5fd626324cf04793a601b2b3a9e983cf" [label="" height=1.9 image="./qakicons/system.png" shape=none]
+		subgraph cluster_ctxmapbuild {
+			graph [bgcolor=lightyellow fontname="Sans-Serif" fontsize=22 label=ctxmapbuild labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+			"54a4315451c74c67a5c4b59d06fc9f15" [label=mapbuilder height=1.9 image="./qakicons/symActorWithobjSmall.png" shape=none]
+		}
+	}
+}

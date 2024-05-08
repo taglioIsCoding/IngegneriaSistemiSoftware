@@ -1,0 +1,16 @@
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"coverColumn", "nextstate":"coverColumn", "msgId":"stepdone"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"coverColumn", "nextstate":"turn", "msgId":"stepfail"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"coverColumn", "nextstate":"alt", "msgId":"alt"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"turn", "nextstate":"stepAfterTurn", "msgId":"stepdone"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"turn", "nextstate":"lastColumn", "msgId":"stepfail"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"turn", "nextstate":"alt", "msgId":"alt"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"stepAfterTurn", "nextstate":"coverColumn", "msgId":"stepdone"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"stepAfterTurn", "nextstate":"lastColumn", "msgId":"stepfail"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"stepAfterTurn", "nextstate":"alt", "msgId":"alt"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"lastColumn", "nextstate":"coverLastColumn", "msgId":"stepdone"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"lastColumn", "nextstate":"endofwork", "msgId":"stepfail"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"lastColumn", "nextstate":"alt", "msgId":"alt"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"coverLastColumn", "nextstate":"coverLastColumn", "msgId":"stepdone"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"coverLastColumn", "nextstate":"endofwork", "msgId":"stepfail"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"coverLastColumn", "nextstate":"alt", "msgId":"alt"}
+{"actor":"cleaner24", "msgType":"dispatch", "curstate":"alt", "nextstate":"coverColumn", "msgId":"stepdone"}

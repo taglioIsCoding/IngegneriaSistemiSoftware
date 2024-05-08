@@ -21,11 +21,10 @@ evattr = {
     'color': 'darkgreen',
     'style': 'dotted'
 }
-with Diagram('robot_cleanerArch', show=False, outformat='png', graph_attr=graphattr) as diag:
+with Diagram('mapbuildArch', show=False, outformat='png', graph_attr=graphattr) as diag:
   with Cluster('env'):
      sys = Custom('','./qakicons/system.png')
 ### see https://renenyffenegger.ch/notes/tools/Graphviz/attributes/label/HTML-like/index
-     with Cluster('ctxrobot', graph_attr=nodeattr):
-          robot=Custom('robot','./qakicons/symActorSmall.png')
-          user=Custom('user','./qakicons/symActorSmall.png')
+     with Cluster('ctxmapbuild', graph_attr=nodeattr):
+          mapbuilder=Custom('mapbuilder','./qakicons/symActorWithobjSmall.png')
 diag
